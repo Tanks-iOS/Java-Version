@@ -691,6 +691,7 @@ public class Tanks_Deploy {
                 myPanel.tankSpeed = myPanel.tankSpeed * 2;
                 myPanel.bulletMag = 10;
                 myPanel.recoverTime = 250000000;
+                myPanel.triggerSpeed = 120000000;
                 myPanel.godMODE = true;
             }
 

@@ -48,6 +48,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
     Image loosingScreen;
     Image highScoreScreen;
     Image bulletBillA;
+    Image brick;
     BufferedImage bullet;
     URL imgURL;
     MediaTracker mediaTracker = new MediaTracker(this);
@@ -117,10 +118,13 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
     int unTrackWidth = 350;//distance greter than this the enemy should follow me
     ArrayList<bullet> activeBullets = new ArrayList();//active bullets array list
     ArrayList<enemyTank> activeTanks = new ArrayList();//active enemy array list
+    ArrayList<brick>  activeBricks = new ArrayList(); 
     Iterator bulletitr;
     Iterator tankitr;
     Iterator bulletremover;
     Iterator tankremover;
+    Iterator brickitr;
+    Iterator brickremover;
     //
     //god mode
     int godModeCounter = 0;
@@ -197,6 +201,18 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 theBullet = null;
             }
         }
+        
+        //wall removers
+        brickremover = activeBricks.iterator();
+        
+        while (brickremover.hasNext()){
+            brick theBrick = (brick) brickremover.next();
+                try {
+                brickremover.remove();
+            } catch (ConcurrentModificationException e) {
+                theBrick = null;
+            }
+        }
 
         //spawn opponents based on level
         switch (level) {
@@ -204,6 +220,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 tankX = 450;//my coridinates
                 tankY = 450;
                 activeTanks.add(new enemyTank(1150, 450, 1, false));//first enemy (coridinates, its number, weather it is smart)
+                activeBricks.add(new brick(400,500));
                 enemyNumb = 1;//number of ennemies
                 break;
             case 2:
@@ -355,6 +372,9 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 enemyNumb = 10;
                 godModeBulletSpeed += .5;//speed increase each round
                 godModeCounter++;
+                recoverTime *= .9;//recover time of bullets
+                triggerSpeed *= .9;
+                tankSpeed +=0.2;
                 enemyDeathsToTurnOnAI = enemyNumb - godModeCounter;//number of AI increase each round
                 break;
         }
@@ -367,6 +387,8 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
             godMODE = false;
             godModeBulletSpeed = 5;
             bulletSpeed = 5;
+            recoverTime = 600000000;
+            triggerSpeed = 300000000;
         }
     }
 
@@ -426,10 +448,14 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
         imgURL = getClass().getResource("enemyTankBase.png");
         enemyTankBase = Toolkit.getDefaultToolkit().getImage(imgURL);
         mediaTracker.addImage(enemyTankBase, 0);
-
+        
         imgURL = getClass().getResource("bulletBillA.png");
         bulletBillA = Toolkit.getDefaultToolkit().getImage(imgURL);
         mediaTracker.addImage(bulletBillA, 0);
+
+        imgURL = getClass().getResource("brick.png");
+        brick = Toolkit.getDefaultToolkit().getImage(imgURL);
+        mediaTracker.addImage(brick, 0);
 
         imgURL = this.getClass().getResource("goldBulletBill.png");
         bullet = ImageIO.read(imgURL);
@@ -485,6 +511,13 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 } else {
                     g.drawImage(enemyTankBase, (int) (theTank.enemyX - (enemyTankBase.getWidth(this) / 2)), (int) (theTank.enemyY - (enemyTankBase.getHeight(this) / 2)), this);
                 }
+            }
+            
+            brickitr = activeBricks.iterator();
+            
+            while(brickitr.hasNext()){
+                brick theBrick = (brick) brickitr.next();
+                    g.drawImage(brick, (int) (theBrick.brickX - (brick.getWidth(this)/2)),(int) (theBrick.brickY - (brick.getWidth(this)/2)), this);
             }
 
             //draw my tank
