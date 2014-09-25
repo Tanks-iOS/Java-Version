@@ -155,7 +155,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
     char keyPressed;
     char keyReleased;
     String logger;
-    boolean printLine = true;//turns the game debug print line on or off
+    boolean printLine = false;//turns the game debug print line on or off
 
     public void brickLayer(int x, int y, int toX, int toY) {
         int incerment = 75;
