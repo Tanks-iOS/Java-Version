@@ -118,7 +118,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
     int unTrackWidth = 350;//distance greter than this the enemy should follow me
     ArrayList<bullet> activeBullets = new ArrayList();//active bullets array list
     ArrayList<enemyTank> activeTanks = new ArrayList();//active enemy array list
-    ArrayList<brick>  activeBricks = new ArrayList(); 
+    ArrayList<brick> activeBricks = new ArrayList();
     Iterator bulletitr;
     Iterator tankitr;
     Iterator bulletremover;
@@ -157,23 +157,18 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
     String logger;
     boolean printLine = false;//turns the game debug print line on or off
 
-    public void brickLayer(int x, int y, int toX, int toY){
-        int incerment=75;
-        System.out.println("ya");
-        double angle = Math.atan2((y-toY),(x-toX));
-        double distance = (double) Math.pow((Math.pow(x-toX,2)+Math.pow(y-toY,2)),.5);
-                System.out.println(distance);
-        for(int i=(int) distance;i>0;i-=incerment)
-        {
-        activeBricks.add(new brick(x, y,angle));
-        System.out.println(x + y);
-        x+=(Math.sin(angle-(Math.PI/2))*incerment);
-        y+=(Math.cos(angle+(Math.PI/2))*incerment);
-        System.out.println("hahahaha");
+    public void brickLayer(int x, int y, int toX, int toY) {
+        int incerment = 75;
+        double angle = Math.atan2((y - toY), (x - toX));
+        double distance = (double) Math.pow((Math.pow(x - toX, 2) + Math.pow(y - toY, 2)), .5);
+        for (int i = (int) distance; i > 0; i -= incerment) {
+            activeBricks.add(new brick(x, y, angle));
+            x += (Math.sin(angle - (Math.PI / 2)) * incerment);
+            y += (Math.cos(angle + (Math.PI / 2)) * incerment);
         }
-            
+
     }
-    
+
     //reset the field
     public void resetField() {
         //reset variables
@@ -218,13 +213,13 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 theBullet = null;
             }
         }
-        
+
         //wall removers
         brickremover = activeBricks.iterator();
-        
-        while (brickremover.hasNext()){
+
+        while (brickremover.hasNext()) {
             brick theBrick = (brick) brickremover.next();
-                try {
+            try {
                 brickremover.remove();
             } catch (ConcurrentModificationException e) {
                 theBrick = null;
@@ -238,8 +233,8 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 tankY = 450;
                 activeTanks.add(new enemyTank(1150, 450, 1, false));//first enemy (coridinates, its number, weather it is smart)
                 enemyNumb = 1;//number of ennemies
-                brickLayer(100,500,900,800);
-                System.out.println("ay");
+                brickLayer(100, 200, 1525, 200);
+                brickLayer(800, 275, 800, 800);
                 break;
             case 2:
                 tankX = 450;
@@ -392,7 +387,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 godModeCounter++;
                 recoverTime *= .9;//recover time of bullets
                 triggerSpeed *= .9;
-                tankSpeed +=0.2;
+                tankSpeed += 0.2;
                 enemyDeathsToTurnOnAI = enemyNumb - godModeCounter;//number of AI increase each round
                 break;
         }
@@ -466,7 +461,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
         imgURL = getClass().getResource("enemyTankBase.png");
         enemyTankBase = Toolkit.getDefaultToolkit().getImage(imgURL);
         mediaTracker.addImage(enemyTankBase, 0);
-        
+
         imgURL = getClass().getResource("bulletBillA.png");
         bulletBillA = Toolkit.getDefaultToolkit().getImage(imgURL);
         mediaTracker.addImage(bulletBillA, 0);
@@ -571,11 +566,11 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
             }
 
             brickitr = activeBricks.iterator();
-            
-            while(brickitr.hasNext()){
+
+            while (brickitr.hasNext()) {
                 brick theBrick = (brick) brickitr.next();
                     //g.drawImage(brick, (int) (theBrick.brickX - (brick.getWidth(this)/2)),(int) (theBrick.brickY - (brick.getWidth(this)/2)), this);
-                    
+
 //rotate the bullet
                 AffineTransform affineTransform = new AffineTransform();
                 affineTransform.rotate(theBrick.angle, brick.getWidth() / 2, brick.getHeight() / 2);
