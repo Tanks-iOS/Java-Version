@@ -48,7 +48,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
     Image loosingScreen;
     Image highScoreScreen;
     Image bulletBillA;
-    Image brick;
+    BufferedImage brick;
     BufferedImage bullet;
     URL imgURL;
     MediaTracker mediaTracker = new MediaTracker(this);
@@ -157,6 +157,23 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
     String logger;
     boolean printLine = false;//turns the game debug print line on or off
 
+    public void brickLayer(int x, int y, int toX, int toY){
+        int incerment=75;
+        System.out.println("ya");
+        double angle = Math.atan2((y-toY),(x-toX));
+        double distance = (double) Math.pow((Math.pow(x-toX,2)+Math.pow(y-toY,2)),.5);
+                System.out.println(distance);
+        for(int i=(int) distance;i>0;i-=incerment)
+        {
+        activeBricks.add(new brick(x, y,angle));
+        System.out.println(x + y);
+        x+=(Math.sin(angle-(Math.PI/2))*incerment);
+        y+=(Math.cos(angle+(Math.PI/2))*incerment);
+        System.out.println("hahahaha");
+        }
+            
+    }
+    
     //reset the field
     public void resetField() {
         //reset variables
@@ -220,10 +237,9 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 tankX = 450;//my coridinates
                 tankY = 450;
                 activeTanks.add(new enemyTank(1150, 450, 1, false));//first enemy (coridinates, its number, weather it is smart)
-                activeBricks.add(new brick(800,525));
-                activeBricks.add(new brick(800,450));
-                activeBricks.add(new brick(800,375));
                 enemyNumb = 1;//number of ennemies
+                brickLayer(100,500,900,800);
+                System.out.println("ay");
                 break;
             case 2:
                 tankX = 450;
@@ -456,7 +472,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
         mediaTracker.addImage(bulletBillA, 0);
 
         imgURL = getClass().getResource("brick.png");
-        brick = Toolkit.getDefaultToolkit().getImage(imgURL);
+        brick = ImageIO.read(imgURL);
         mediaTracker.addImage(brick, 0);
 
         imgURL = this.getClass().getResource("goldBulletBill.png");
@@ -514,13 +530,6 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                     g.drawImage(enemyTankBase, (int) (theTank.enemyX - (enemyTankBase.getWidth(this) / 2)), (int) (theTank.enemyY - (enemyTankBase.getHeight(this) / 2)), this);
                 }
             }
-            
-            brickitr = activeBricks.iterator();
-            
-            while(brickitr.hasNext()){
-                brick theBrick = (brick) brickitr.next();
-                    g.drawImage(brick, (int) (theBrick.brickX - (brick.getWidth(this)/2)),(int) (theBrick.brickY - (brick.getWidth(this)/2)), this);
-            }
 
             //draw my tank
             if (!gameOver) {
@@ -561,6 +570,23 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 g.drawImage(bulletRotated, (int) theBullet.bulletX - (bulletRotated.getWidth(this) / 2), (int) theBullet.bulletY - (bulletRotated.getHeight(this) / 2), this);
             }
 
+            brickitr = activeBricks.iterator();
+            
+            while(brickitr.hasNext()){
+                brick theBrick = (brick) brickitr.next();
+                    //g.drawImage(brick, (int) (theBrick.brickX - (brick.getWidth(this)/2)),(int) (theBrick.brickY - (brick.getWidth(this)/2)), this);
+                    
+//rotate the bullet
+                AffineTransform affineTransform = new AffineTransform();
+                affineTransform.rotate(theBrick.angle, brick.getWidth() / 2, brick.getHeight() / 2);
+                AffineTransformOp opRotated = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
+
+                //bulletRotated is a reotated version of the bullet
+                BufferedImage brickRotated = opRotated.filter(brick, null);
+
+                //draw the rotated bullets
+                g.drawImage(brickRotated, (int) theBrick.brickX - (brickRotated.getWidth(this) / 2), (int) theBrick.brickY - (brickRotated.getHeight(this) / 2), this);
+            }
             //draw paused sign
             //if the game is paused
             if (pause) {

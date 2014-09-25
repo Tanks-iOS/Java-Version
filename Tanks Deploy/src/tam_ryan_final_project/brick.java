@@ -12,13 +12,14 @@ package tam_ryan_final_project;
 public class brick {
     int brickX;
     int brickY;
+    double angle;
     
     
-    
-    brick(int x, int y)
+    brick(int x, int y, double degrees)
     {
     brickX=x;
     brickY=y;
+    angle=degrees;
     }
     
 }
