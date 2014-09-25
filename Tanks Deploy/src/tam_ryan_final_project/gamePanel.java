@@ -233,8 +233,8 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 tankY = 450;
                 activeTanks.add(new enemyTank(1150, 450, 1, false));//first enemy (coridinates, its number, weather it is smart)
                 enemyNumb = 1;//number of ennemies
-                brickLayer(100, 200, 1525, 600);
-                brickLayer(800, 275, 800, 800);
+                //brickLayer(100, 200, 1525, 600);
+                //brickLayer(800, 275, 800, 800);
                 break;
             case 2:
                 tankX = 450;
