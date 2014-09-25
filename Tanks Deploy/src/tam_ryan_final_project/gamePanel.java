@@ -155,7 +155,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
     char keyPressed;
     char keyReleased;
     String logger;
-    boolean printLine = false;//turns the game debug print line on or off
+    boolean printLine = true;//turns the game debug print line on or off
 
     public void brickLayer(int x, int y, int toX, int toY) {
         int incerment = 75;
@@ -233,7 +233,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 tankY = 450;
                 activeTanks.add(new enemyTank(1150, 450, 1, false));//first enemy (coridinates, its number, weather it is smart)
                 enemyNumb = 1;//number of ennemies
-                brickLayer(100, 200, 1525, 200);
+                brickLayer(100, 200, 1525, 600);
                 brickLayer(800, 275, 800, 800);
                 break;
             case 2:
@@ -554,9 +554,9 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
                 bullet theBullet = (bullet) bulletitr.next();
 
                 //rotate the bullet
-                AffineTransform affineTransform = new AffineTransform();
-                affineTransform.rotate(theBullet.bulletAngle, bullet.getWidth() / 2, bullet.getHeight() / 2);
-                AffineTransformOp opRotated = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
+                AffineTransform bulletaffineTransform = new AffineTransform();
+                bulletaffineTransform.rotate(theBullet.bulletAngle, bullet.getWidth() / 2, bullet.getHeight() / 2);
+                AffineTransformOp opRotated = new AffineTransformOp(bulletaffineTransform, AffineTransformOp.TYPE_BILINEAR);
 
                 //bulletRotated is a reotated version of the bullet
                 BufferedImage bulletRotated = opRotated.filter(bullet, null);
@@ -573,7 +573,7 @@ public class gamePanel extends JPanel implements KeyListener, MouseListener, Mou
 
 //rotate the bullet
                 AffineTransform affineTransform = new AffineTransform();
-                affineTransform.rotate(theBrick.angle, brick.getWidth() / 2, brick.getHeight() / 2);
+                affineTransform.rotate(theBrick.angle, brick.getWidth()+1 / 2, brick.getHeight() / 2);
                 AffineTransformOp opRotated = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
 
                 //bulletRotated is a reotated version of the bullet
